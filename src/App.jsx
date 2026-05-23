@@ -1,9 +1,13 @@
 import React from 'react'
+import Login from './components/Login'
+
+
+export const backendUrl = 'http://localhost:4000'
 
 const App = () => {
   return (
     <div>
-      <h1 className='text-2xl font-bold text-amber-300'>Hello cats</h1>
+      <Login/>
     </div>
   )
 }
