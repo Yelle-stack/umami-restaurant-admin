@@ -1,21 +1,36 @@
 
 import React, { useState } from 'react'
+import { backendUrl } from '../App'
+import { toast } from 'react-toastify'
+import axios from 'axios'
 
-const Login = () => {
+const Login = ({setToken}) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(email, password)
+  const OnSubmitHandler = async (e) => {
+    try {
+      e.preventDefault();
+
+      const response = await axios.post(backendUrl + '/api/user/admin', {email, password})
+      if(response.data.success){
+        setToken(response.data.token)
+      } else{
+        toast.error(response.data.message)
+      }
+    } catch (error) {
+      console.log(error);
+      
+    }
   }
+
 
   return (
     <div>
       <div className='flex justify-center items-center min-h-screen bg-gray-100'>
         <div className='bg-white shadow-md rounded-lg px-8 py-6 w-full max-w-md'>
           <h1 className='text-2xl font-bold text-center text-gray-800 mb-4'>Admin Login</h1>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={OnSubmitHandler}>
             <div className='mb-4'>
               <p className='text-sm font-semibold text-gray-600 mb-2'>Email Address</p>
                <input 
