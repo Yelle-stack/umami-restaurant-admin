@@ -1,6 +1,9 @@
 import React from 'react'
 import upload_img from '../assets/upload_img.png'
 import { useState } from 'react'
+import axios from 'axios'
+import { backendUrl } from '../App'
+import { toast } from 'react-toastify'
 
 const AddMenu = ({token}) => {
 
@@ -9,9 +12,39 @@ const AddMenu = ({token}) => {
   const [description, setDescription] = useState("")
   const [price, setPrice] = useState("")
   const [category, setCategory] = useState("All")
+
+  const OnSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData()
+      formData.append("name", name)
+      formData.append("description", description)
+      formData.append("price", price)
+      formData.append("category", category)
+      if(image) formData.append("image", image)
+
+        const response = await axios.post(`${backendUrl}/api/product/add`, formData, {headers: {token}})
+        if (response.data.success) {
+          toast.success(response.data.message)
+          setName("")
+          setDescription("")
+          setPrice("")
+          setImage(null)
+          
+        } else {
+          toast.error(response.data.message)
+        }
+    } catch (error) {
+    console.log(error);
+    toast.error(error.message)
+    
+    }
+  }
   return (
     <div className='w-full max-w-4xl p-6 bg-white rounded-lg shadow'>
-      <form className='flex flex-col items-start gap-1'>
+      <form onSubmit={OnSubmitHandler}
+      className='flex flex-col items-start gap-1'>
         <div>
           <p>Upload Image</p>
           <div>
@@ -71,11 +104,11 @@ const AddMenu = ({token}) => {
           </div>
         </div>
         <button 
-        className='mt-6 px-20 py-3 bg-amber-500 rounded hover: opacity-90'
+        className='mt-6 px-20 py-3 bg-amber-500 rounded hover:opacity-90'
         type="submit">Add Menu</button>
       </form>
     </div>
   )
 }
 
-export default AddMenu
+export default AddMenu;
