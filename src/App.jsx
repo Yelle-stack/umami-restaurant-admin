@@ -31,7 +31,7 @@ const App = () => {
           <>
           <div className='flex w-full'>
             <Sidebar setToken={setToken}/>
-            <div className='w-[70%] ml-[max(5vw, 25px)] my-8 text-black text-base'>
+            <div className='flex-1 px-8 my-8 text-black text-base'>
               <Routes>
                 <Route path='/add' element={<AddMenu token={token}/>} />
                 <Route path='/list' element={<ListMenu token={token}/>} />
