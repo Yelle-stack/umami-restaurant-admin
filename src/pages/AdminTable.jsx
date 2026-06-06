@@ -1,11 +1,22 @@
+
 import axios from 'axios'
 import React, { useState, useEffect } from 'react'
 import { backendUrl } from '../App'
+import { toast } from 'react-toastify'
 
 
 
 const AdminTable = () => {
   const [reservations, setReservations] = useState([])
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`${backendUrl}/api/reservations/delete/${id}`)
+      toast.success('Reservation removed')
+    } catch (error) {
+      console.log("Error deleting reservations");
+    }
+  }
 
   useEffect(()=> {
 
@@ -58,6 +69,7 @@ fetchReservations()
                     <td className='p-3'>{res.guests}</td>
                     <td>
                       <button 
+                      onClick={(handleDelete(res._id))}
                       className='bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600'
                       >Delete
                       </button>
